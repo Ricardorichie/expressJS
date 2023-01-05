@@ -1,5 +1,5 @@
-// const products = [];
 const Product = require("../models/product");
+
 exports.getAddProduct = (req, res, next) => {
   //   res.sendFile(path.join(__dirname, "..", "views", "add-product.html")); // sending a file from a path gotten with path module where __dirname is the path of the current folder
   // or
@@ -30,7 +30,7 @@ exports.getAddProduct = (req, res, next) => {
   // });
 
   //using the ejs template engine
-  res.render("add-product", {
+  res.render("admin/add-product", {
     pageTitle: "add product handlebar",
     path: "/admin/add-product",
   });
@@ -38,7 +38,11 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
   //   products.push({ title: req.body.title });
-  const product = new Product(req.body.title);
+  const title = req.body.title;
+  const imageUrl = req.body.imageUrl;
+  const price = req.body.price;
+  const description = req.body.description;
+  const product = new Product(title, imageUrl, description, price);
   product.save();
   console.log("req.body", req.body);
   res.redirect("/");
@@ -46,39 +50,10 @@ exports.postAddProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll((products) => {
-    //USING HTML FILE
-
-    //   console.log("in another middleware");
-    //   res.send("<h1>Hello from Express</h1>");
-    //   console.log("admin Data products", adminData.products);
-    //   res.sendFile(path.join(__dirname, "..", "views", "shop.html")); /// sending a file from a path gotten with path module where __dirname is the path of the current folder
-
-    //USING TEMPLATING ENGINE
-    //Where shop is the name of the pub
-    //   const products = adminData.products;
-    //using pug template
-    // res.render("shop", {
-    //   prods: products,
-    //   pageTitle: "shop",
-    //   path: "/",
-    // });
-
-    //using handlebar template engine
-    // res.render("shop", {
-    //   prods: products,
-    //   pageTitle: "shop",
-    //   path: "/",
-    //   hasProducts: products.length > 0,
-    //   // layout: false,
-    //   activeShop: true,
-    //   productCSS: true,
-    // });
-
-    //using ejs template engine
-    res.render("shop", {
+    res.render("admin/products", {
       prods: products,
-      pageTitle: "shop ejs",
-      path: "/",
+      pageTitle: "Admin Products",
+      path: "/admin/products",
     });
   });
 };
