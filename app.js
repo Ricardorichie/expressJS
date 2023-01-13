@@ -37,7 +37,7 @@ app.set("view engine", "ejs");
 app.set("views", "views");
 
 //GET BODY CONTENT
-//using the parser to get the content of the body
+//using the parser to get the content of the body form
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //allow to statically serve the a file from the folder content
