@@ -8,7 +8,7 @@ const adminRoutes = require("./routes/admin");
 // const shopRoutes = require("./routes/shop");
 
 // const errorController = require("./controllers/error");
-const mongoConnect = require("./util/database");
+const mongoConnect = require("./util/database").mongoConnect;
 
 const app = express();
 
@@ -51,6 +51,7 @@ app.use(express.static(path.join(__dirname, "public"))); //giving access to file
 
 //middleware for incoming requests
 app.use((req, res, next) => {
+  next();
   // User.findOne({ where: { id: 1 } })
   //   .then((user) => {
   //     req.user = user; // adding new field to the request object to store the user sequelize content from the database
@@ -66,7 +67,7 @@ app.use("/admin", adminRoutes);
 // app.use(shopRoutes);
 // app.use(errorController.get404);
 
-mongoConnect((client) => {
-  console.log(client);
-  app.listen(3000);
+mongoConnect(() => {
+  // console.log(client);
+  app.listen(3030);
 });
