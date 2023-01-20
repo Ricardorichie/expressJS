@@ -4,7 +4,7 @@ const expressHbs = require("express-handlebars");
 const express = require("express");
 const bodyParser = require("body-parser");
 
-// const adminRoutes = require("./routes/admin");
+const adminRoutes = require("./routes/admin");
 // const shopRoutes = require("./routes/shop");
 
 // const errorController = require("./controllers/error");
@@ -62,7 +62,7 @@ app.use((req, res, next) => {
 });
 
 //order of the middleware is always important
-// app.use("/admin", adminRoutes);
+app.use("/admin", adminRoutes);
 // app.use(shopRoutes);
 // app.use(errorController.get404);
 
