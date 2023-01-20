@@ -13,15 +13,11 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  req.user
-    .createProduct({
-      title: title,
-      price: price,
-      imageUrl: imageUrl,
-      description: description,
-    }) //internally available by sequelize and it adds the id field to the product table
+  const product = new Product(title, price, description, imageUrl);
+  product
+    .save()
     .then((result) => {
-      res.redirect("/");
+      res.redirect("/admin/products");
       console.log(result);
     })
     .catch((err) => {
