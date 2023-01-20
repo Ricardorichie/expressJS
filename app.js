@@ -4,18 +4,11 @@ const expressHbs = require("express-handlebars");
 const express = require("express");
 const bodyParser = require("body-parser");
 
-const adminRoutes = require("./routes/admin");
-const shopRoutes = require("./routes/shop");
+// const adminRoutes = require("./routes/admin");
+// const shopRoutes = require("./routes/shop");
 
-const errorController = require("./controllers/error");
-
-const sequelize = require("./util/database");
-const Product = require("./models/product");
-const User = require("./models/user");
-const Cart = require("./models/cart");
-const CartItem = require("./models/cart-item");
-const Order = require("./models/order");
-const OrderItem = require("./models/order-item");
+// const errorController = require("./controllers/error");
+const mongoConnect = require("./util/database");
 
 const app = express();
 
@@ -58,65 +51,22 @@ app.use(express.static(path.join(__dirname, "public"))); //giving access to file
 
 //middleware for incoming requests
 app.use((req, res, next) => {
-  User.findOne({ where: { id: 1 } })
-    .then((user) => {
-      req.user = user; // adding new field to the request object to store the user sequelize content from the database
-      next();
-    })
-    .catch((err) => {
-      console.log("error", err);
-    });
+  // User.findOne({ where: { id: 1 } })
+  //   .then((user) => {
+  //     req.user = user; // adding new field to the request object to store the user sequelize content from the database
+  //     next();
+  //   })
+  //   .catch((err) => {
+  //     console.log("error", err);
+  //   });
 });
 
 //order of the middleware is always important
-app.use("/admin", adminRoutes);
-app.use(shopRoutes);
-app.use(errorController.get404);
+// app.use("/admin", adminRoutes);
+// app.use(shopRoutes);
+// app.use(errorController.get404);
 
-//create associations/relationship between product and user models (1:M relationship)
-Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
-User.hasMany(Product);
-
-//create associations/relationship user and cart (1:1 relationship)
-User.hasOne(Cart);
-Cart.belongsTo(User);
-
-//create associations/relationship product and cart (M:M relationship)
-//the through property links the 2 tables together by storing their id property in them
-Product.belongsToMany(Cart, { through: CartItem });
-Cart.belongsToMany(Product, { through: CartItem });
-
-//create association/relationship between user and orders (1:M)
-Order.belongsTo(User);
-User.hasMany(Order);
-
-//create associations/relationship product and orders (M:M relationship)
-//the through property links the 2 tables together by storing their id property in them
-
-Product.belongsToMany(Order, { through: OrderItem });
-Order.belongsToMany(Product, { through: OrderItem });
-
-//sync the table to the database
-sequelize
-  .sync()
-  // .sync({ force: true }) //not needed in production
-  .then((result) => {
-    return User.findOne({ where: { id: 1 } });
-    // console.log("sequelize result", result);
-  })
-  .then((user) => {
-    if (!user) {
-      return User.create({ name: "Richard", email: "test@test.com" });
-    }
-    return user;
-  })
-  .then((user) => {
-    return user.createCart();
-    // console.log(user);
-  })
-  .then((result) => {
-    app.listen(3030); //port
-  })
-  .catch((err) => {
-    console.log("sequelize error", err);
-  });
+mongoConnect((client) => {
+  console.log(client);
+  app.listen(3000);
+});

@@ -1,17 +1,17 @@
-//  const mysql = require("mysql2");
+const mongodb = require("mongodb");
+const MongoClient = mongodb.MongoClient;
 
-// const pool = mysql.createPool({
-//   host: "localhost",
-//   user: "root",
-//   database: "node-complete",
-//   password: "root1234",
-// }); //creates pool of connections to run muliple queries simultenously
-// module.exports = pool.promise();
+const mongoConnect = (callback) => {
+  MongoClient.connect(
+    "mongodb+srv://richardadesina:iSdvucYF0Ks9BG7X@cluster0.statdgd.mongodb.net/?retryWrites=true&w=majority"
+  )
+    .then((client) => {
+      console.log("CONNECTED! from nosql");
+      callback(client);
+    })
+    .catch((err) => {
+      console.log("nosql err", err);
+    });
+};
 
-const Sequelize = require("sequelize");
-
-const sequelize = new Sequelize("node-complete", "root", "root1234", {
-  dialect: "mysql",
-  host: "localhost",
-});
-module.exports = sequelize;
+module.exports = mongoConnect;

@@ -62,7 +62,6 @@ exports.getCart = (req, res, next) => {
         .catch((err) => {
           console.log("nested error", err);
         });
-      console.log();
     })
     .catch((err) => console.log("getCart error", err));
 };
