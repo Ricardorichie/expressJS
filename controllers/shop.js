@@ -1,10 +1,8 @@
 // const products = [];
 const Product = require("../models/product");
-const Cart = require("../models/cart");
-const OrderItem = require("../models/order-item");
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then((products) => {
       res.render("shop/product-list", {
         prods: products,
@@ -21,19 +19,19 @@ exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId;
   // Product.findByPk(prodId) or
 
-  Product.findOne({ where: { id: prodId } })
-    .then((product) => {
-      res.render("shop/product-detail", {
-        product: product,
-        pageTitle: "Shop details",
-        path: "/products",
-      });
-    })
-    .catch((e) => console.log("get product id error", e));
+  // Product.findOne({ where: { id: prodId } })
+  //   .then((product) => {
+  //     res.render("shop/product-detail", {
+  //       product: product,
+  //       pageTitle: "Shop details",
+  //       path: "/products",
+  //     });
+  //   })
+  //   .catch((e) => console.log("get product id error", e));
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then((products) => {
       res.render("shop/index", {
         prods: products,
