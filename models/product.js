@@ -8,7 +8,7 @@ class Product {
     this.price = price;
     this.description = description;
     this.imageUrl = imageUrl;
-    this._id = id;
+    this._id = new ObjectId(id);
   }
   save() {
     const db = getDb();
@@ -16,7 +16,7 @@ class Product {
     if (this._id) {
       dpOp = db
         .collection("products")
-        .updateOne({ _id: new ObjectId(this._id) }, { $set: this });
+        .updateOne({ _id: this._id }, { $set: this });
     } else {
       dpOp = db.collection("products").insertOne(this);
     }
@@ -54,6 +54,19 @@ class Product {
       })
       .catch((err) => {
         console.log("fecth all", err);
+      });
+  }
+
+  static deleteById(prodId) {
+    const db = getDb();
+    return db
+      .collection("products")
+      .deleteOne({ _id: new ObjectId(prodId) })
+      .then((result) => {
+        console.log("Deleted");
+      })
+      .catch((err) => {
+        console.log("delete by id", err);
       });
   }
 }
