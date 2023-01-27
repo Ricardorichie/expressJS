@@ -9,6 +9,7 @@ const shopRoutes = require("./routes/shop");
 
 const errorController = require("./controllers/error");
 const mongoConnect = require("./util/database").mongoConnect;
+const User = require("./models/user");
 
 const app = express();
 
@@ -51,15 +52,16 @@ app.use(express.static(path.join(__dirname, "public"))); //giving access to file
 
 //middleware for incoming requests
 app.use((req, res, next) => {
+  User.findById("63d318f013bfbf3598688307")
+    .then((user) => {
+      req.user = user;
+      next();
+      console.log("user", user);
+    })
+    .catch((err) => {
+      console.log("error", err);
+    });
   next();
-  // User.findOne({ where: { id: 1 } })
-  //   .then((user) => {
-  //     req.user = user; // adding new field to the request object to store the user sequelize content from the database
-  //     next();
-  //   })
-  //   .catch((err) => {
-  //     console.log("error", err);
-  //   });
 });
 
 //order of the middleware is always important
@@ -69,5 +71,6 @@ app.use(errorController.get404);
 
 mongoConnect(() => {
   // console.log(client);
+
   app.listen(3030);
 });
