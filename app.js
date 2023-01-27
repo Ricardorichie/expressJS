@@ -59,9 +59,9 @@ app.use((req, res, next) => {
       console.log("user", user);
     })
     .catch((err) => {
-      console.log("error", err);
+      console.log("error app", err);
     });
-  next();
+  // next();
 });
 
 //order of the middleware is always important
