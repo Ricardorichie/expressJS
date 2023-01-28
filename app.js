@@ -54,7 +54,7 @@ app.use(express.static(path.join(__dirname, "public"))); //giving access to file
 app.use((req, res, next) => {
   User.findById("63d318f013bfbf3598688307")
     .then((user) => {
-      req.user = user;
+      req.user = new User(user.name, user.email, user.cart, user._id);
       next();
       console.log("user", user);
     })
